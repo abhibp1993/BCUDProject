@@ -18,5 +18,5 @@ Student Team:
 # Version 2.0
 In progess. Major revisions in code organization, and functionality are being made. Stay tuned for release.
 
-#Version 1.0
+#Version 1.0.0
 The version only features code for Arduino Control section. The code is higly inefficient but works!! It is NOT recommended for use in real life.
