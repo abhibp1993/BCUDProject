@@ -31,7 +31,7 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 
 
 float maxAccel = 0.15;
-
+extern uint32_t counter;
 
 
 float PID(float kp, float ki, float kd, uint16_t refSpeed, uint16_t currSpeed, uint16_t* err_integral, uint16_t* err_lastIter){
@@ -90,11 +90,17 @@ void m_setPWM(uint8_t pin_pwm, float duty){
   else if  (min_duty >= 0.08  && min_duty < 0.30)   {setPWMFrequency(pin_pwm, 1024);}
   else if  (min_duty >= 0.30 && min_duty < 0.50)    {setPWMFrequency(pin_pwm, 0256);}  
   else if  (min_duty >= 0.50  && min_duty < 1.00)   {setPWMFrequency(pin_pwm, 0064);}
-  else if  (min_duty >= 1.00)   {setPWMFrequency(pin_pwm, 64);}
+  else if  (min_duty >= 1.00)                       {setPWMFrequency(pin_pwm, 64);}
+  
   
   /* Set PWM duty */
-  analogWrite(pin_pwm, duty);
+  analogWrite(pin_pwm, (uint8_t)(duty * 255));
   
+}
+
+
+void m_pulse(){
+  counter = 0;
 }
 
 
@@ -104,7 +110,24 @@ void m_updateCurrent(float* m1_curr, float* m2_curr){
   *(m2_curr) = (float)(analogRead(PIN_M2_CS)) / M_CURR_SCALE;
 }
 
-void m1_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd, boolean pid_engage){
+
+void m_updateSpeed(PololuWheelEncoders enc, uint16_t* m1_speed, uint16_t* m2_speed){  
+  
+  long int count;
+
+  count = enc.getCountsAndResetM1();
+  delay(10);
+  count = enc.getCountsAndResetM1();
+  *(m1_speed) = (uint16_t)(count * 7.5);
+  
+  count = enc.getCountsAndResetM2();
+  delay(10);
+  count = enc.getCountsAndResetM2();
+  *(m2_speed) = (uint16_t)(count * 7.5);
+  
+}
+
+void m1_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd){
   
   static uint16_t err_integral = 0;
   static uint16_t err_lastIter = 0;  
@@ -113,26 +136,26 @@ void m1_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, floa
   float correction = 0;
   
   /* According to status of pid_engage, set the speed */
-  if (pid_engage == true){
-    /* Compute the correction for 1 step */
-    correction = PID(kp, ki, kd, refSpeed, currSpeed, &err_integral, &err_lastIter);
-    
-    
-    /* Apply the correction such that acceleration is inside bounds */
-    if       (abs(correction) < maxAccel) { output =  output + correction; }
-    else if  (correction > 0)             { output =  output + maxAccel; }
-    else if  (correction < 0)             { output =  output - maxAccel; }
-    
+  /* Compute the correction for 1 step */
+  correction = PID(kp, ki, kd, refSpeed, currSpeed, &err_integral, &err_lastIter);
+  
+  
+  /* Apply the correction such that acceleration is inside bounds */
+  if       (abs(correction) < maxAccel) { output =  output + correction; }
+  else if  (correction > 0)             { output =  output + maxAccel; }
+  else if  (correction < 0)             { output =  output - maxAccel; }
+  
 
-    /* Apply correction */
-    m_setPWM(PIN_M1_PWM, output);
-  }
-  else{
-    m_setPWM(PIN_M1_PWM, (float)refSpeed / MAX_SPEED);    
-  }
+  /* Apply correction */
+  m_setPWM(PIN_M1_PWM, output);
 }
 
-void m2_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd, boolean pid_engage){
+void m1_setSpeed(uint16_t refSpeed){
+    float val = (float)refSpeed / MAX_SPEED;
+    m_setPWM(PIN_M1_PWM, (float)refSpeed / MAX_SPEED);    
+}
+
+void m2_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd){
 
   static uint16_t err_integral = 0;
   static uint16_t err_lastIter = 0;  
@@ -141,27 +164,26 @@ void m2_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, floa
   float correction = 0;
   
   /* According to status of pid_engage, set the speed */
-  if (pid_engage == true){
-    /* Compute the correction for 1 step */
-    correction = PID(kp, ki, kd, refSpeed, currSpeed, &err_integral, &err_lastIter);
-    
-    
-    /* Apply the correction such that acceleration is inside bounds */
-    if       (abs(correction) < maxAccel) { output =  output + correction; }
-    else if  (correction > 0)             { output =  output + maxAccel; }
-    else if  (correction < 0)             { output =  output - maxAccel; }
-    
 
-    /* Apply correction */
-    m_setPWM(PIN_M2_PWM, output);
-  }
-  else{
-    m_setPWM(PIN_M2_PWM, (float)refSpeed / MAX_SPEED);    
-  }
+  /* Compute the correction for 1 step */
+  correction = PID(kp, ki, kd, refSpeed, currSpeed, &err_integral, &err_lastIter);
   
+  
+  /* Apply the correction such that acceleration is inside bounds */
+  if       (abs(correction) < maxAccel) { output =  output + correction; }
+  else if  (correction > 0)             { output =  output + maxAccel; }
+  else if  (correction < 0)             { output =  output - maxAccel; }
+  
+
+  /* Apply correction */
+  m_setPWM(PIN_M2_PWM, output);  
 }
 
 
+void m2_setSpeed(uint16_t refSpeed){
+    float val = (float)refSpeed / MAX_SPEED;
+    m_setPWM(PIN_M2_PWM, (float)refSpeed / MAX_SPEED);    
+}
 
 void setMaxAcceleration(float val){
   if (val > 0 && val <= 1.0)

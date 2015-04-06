@@ -39,18 +39,18 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 #define PIN_M1_IN2         12  //A7
 #define PIN_M1_PWM         9
 #define PIN_M1_ENCA        2
-#define PIN_M1_ENCB        8
+#define PIN_M1_ENCB        4   // 8
 
 #define PIN_M2_CS          A1
-#define PIN_M2_IN1         7
+#define PIN_M2_IN1         6
 #define PIN_M2_IN2         5
 #define PIN_M2_PWM         10
-#define PIN_M2_ENCA        3
-#define PIN_M2_ENCB        6
+#define PIN_M2_ENCA        8  //3
+#define PIN_M2_ENCB        7  //6
 
-#define PIN_DM_S0          A6  //11
-#define PIN_DM_S1          A7  //12
-#define PIN_DM_Y           13
+#define PIN_DM_S0          A4  //11
+#define PIN_DM_S1          A5  //12
+#define PIN_DM_Y           3
 
 
 #endif 

@@ -38,12 +38,18 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 #include "motor.h"
 #include "protect.h"
 
+#include <FrequencyTimer2.h>
+#include <PololuWheelEncoders.h>
+
+
 
 // IR-Proximity: TCRT5000 via Analog Mux
 byte ir_enable = 0xFF;
 uint16_t ir_value[8];        // check assignment of TCRT <-> index
 
 // Motors: Speed and Current
+PololuWheelEncoders encoders;
+
 float m1_current = 0;        // in Amps
 float m2_current = 0;        // in Amps
 uint16_t m1_speed = 0;
@@ -58,6 +64,12 @@ float m2_ki = 0.0;
 float m2_kd = 0.0;
 uint16_t m1_refSpeed = 0, m2_refSpeed = 0;    //speed = 0 ==> brakes applied; speed = -ve => disengage
 boolean pid_engage = false;
+
+
+uint32_t counter = 0;
+void T2_OVF(void){
+  counter++;
+}
 
 
 void setup(){
@@ -84,19 +96,26 @@ void setup(){
   pinMode(PIN_DM_Y, INPUT);  
   
   
-  pid_engage = true;
+  encoders.init(2,4,8,7);
+  
+  // Testing configurations
+  pid_engage = false;
   m1_kp = 0.5;
   m1_ki = 0.1;
   
   m1_refSpeed = 100;
-  m2_refSpeed = 200;
+  m2_refSpeed = 100;
   
+  digitalWrite(PIN_M1_IN1, LOW);
+  digitalWrite(PIN_M1_IN2, HIGH);
+  analogWrite(9, 100);
 }
 
 
 uint32_t time =0; 
-void loop(){
-
+void loop(){  
+  
+  
   //***********************************************************************************************
   // IR Proximity Sensing, Protection: 
   // Observed Run Time: 1028 micros; 
@@ -108,7 +127,7 @@ void loop(){
   ir_update(ir_enable, ir_value);  
   
   /* PROTECTIONS */
-  ir_protect();
+  //ir_protect();
   
   time = micros() - time;
 
@@ -120,24 +139,26 @@ void loop(){
   
   //***********************************************************************************************
   // Motor Current, Speed Sensing - Intialize, Protection
-  // Observed Run Time:  764 us + [update_speed routine]
-  // MAX TIME ALLOCATION: 1ms +  [update_speed_routine]
+  // Observed Run Time:  764 us + [20.35ms]
+  // MAX TIME ALLOCATION: 25ms
   time = micros();
   
   /* SENSE: CURRENT FLOWING THROUGH MOTORS 1, 2 */
   m_updateCurrent(&m1_current, &m2_current);
   
   /* SENSE: SPEED OF MOTORS 1, 2 */
-  //  m_updateSpeed();  
+  m_updateSpeed(encoders, &m1_speed, &m2_speed);  
   
   /* PROTECTIONS HERE */
-  m_current_protect(m1_current, m2_current);
-  m_diagnostics_protect();
+  //  m_current_protect(m1_current, m2_current);
+  //  m_diagnostics_protect();
   
   time = micros() - time;  
   Serial.print("Motor Current Updated in (us):: ");
   Serial.println(time);
+  
   //***********************************************************************************************
+  
   
   
   //***********************************************************************************************
@@ -148,8 +169,16 @@ void loop(){
   time = micros();
   
   /* ACTION: SET THE SPEED OF MOTORS 1, 2. PID OR DIRECT METHODS */
-  m1_setSpeed(m1_refSpeed, m1_speed, m1_kp, m1_ki, m1_kd, pid_engage);
-  m2_setSpeed(m2_refSpeed, m2_speed, m2_kp, m2_ki, m2_kd, pid_engage);
+  if (pid_engage == true){ 
+    Serial.println("PID"); 
+    m1_setSpeed(m1_refSpeed, m1_speed, m1_kp, m1_ki, m1_kd); 
+    m2_setSpeed(m2_refSpeed, m2_speed, m2_kp, m2_ki, m2_kd); 
+  }
+  else{ 
+    Serial.println("PWM"); 
+    m1_setSpeed(m1_refSpeed); 
+    m2_setSpeed(m2_refSpeed);
+  }
   
   time = micros() - time;  
   Serial.print("Motor Speed Set in (us):: ");

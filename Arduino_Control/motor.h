@@ -28,13 +28,22 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
+#include <PololuWheelEncoders.h>
+
 #define M_CURR_SCALE        (0.13) * 1024 / 5.0      // scaling factor = V_perAmp / 5 * 1024
 #define MAX_SPEED           330
+#define MAX_WAIT_TIME       2000
+#define SPEED_CONSTANT      366656.8915
+
 
 void setMaxAcceleration(float val);
 
 void m_updateCurrent(float* m1_curr, float* m2_curr);
-void m1_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd, boolean pid_engage);
-void m2_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd, boolean pid_engage);
+void m_updateSpeed(PololuWheelEncoders enc, uint16_t* m1_speed, uint16_t* m2_speed);
+
+void m1_setSpeed(uint16_t refSpeed);
+void m1_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd);
+void m2_setSpeed(uint16_t refSpeed);
+void m2_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd);
 
 #endif
