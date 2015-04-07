@@ -41,7 +41,11 @@ along with BCUDProject.  If not, see <http://www.gnu.org/licenses/>.
 //#include <SharpIR.h>
 //#include <avr/wdt.h>
 
-//#define ir A0                //Assign pin for Sharp input
+//#define ir0 A0     
+//#define ir1 A1
+//#define ir2 A2
+//#define ir3 A3
+//Assign pin for Sharp input
 //#define model 20150          //Specify the model of sensor used
 
 
@@ -110,6 +114,34 @@ boolean ir_compensate = false;   // Takes 2 values of TCRT with and without LED 
 uint16_t IRValues[4];            // Readings of TCRT5000 sensors as 10-bit ADC value
 float SharpValues[4];            // Readings of SHARP sensors (in ?? <units>)
 float UltraValues[6];            // Readings of Ultrasonics sensors (in cm)
+
+void sharp_call()
+{
+  if(sharp_enable.0=1)
+  {
+SharpIR sharp(ir0, 25, 93, model);
+  sharp_update();
+  }
+  
+  if(sharp_enable.1=1)
+  {
+SharpIR sharp(ir1, 25, 93, model);
+  sharp_update();
+  }
+  
+  if(sharp_enable.2=1)
+  {
+SharpIR sharp(ir2, 25, 93, model);
+  sharp_update();
+  }
+  
+  if(sharp_enable.3=1)
+  {
+SharpIR sharp(ir3, 25, 93, model);
+  sharp_update();
+  }
+}
+  
 
 void setup() {
   Serial.begin(9600);
@@ -194,7 +226,7 @@ void loop() {
 //     {SharpValues[3]=sharp_update():}
    }
   }
-//  sharp_update();
+//  sharp_call();
 //  if (sharp_engage){
 //    if (sharp_protect()){
 //      system_protect(CLOSEOBSTACLE);

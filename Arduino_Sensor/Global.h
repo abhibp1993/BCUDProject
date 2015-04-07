@@ -2,9 +2,9 @@
 #define GLOBAL_H_
 
 #define PIN_SHARP_1      A0
-#define PIN_SHARP_2      A1
+#define PIN_SHARP_2     A1
 #define PIN_SHARP_3      A2
-#define PIN_SHARP_4      A3    // EXTENSION PIN IF SHARP NOT CONNECTED
+#define PIN_SHARP_4     A3    // EXTENSION PIN IF SHARP NOT CONNECTED
 
 #define PIN_AM_Y         A6
 #define PIN_AM_S0         6
