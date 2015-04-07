@@ -2,56 +2,59 @@
 
 ProjectCurio: Sensor Arduino Sketch
 
-Description:
-  Interfaces 5 ultrasonic (HCSR04) Sensors and 6 Analog output IR sensors.
-  The main loop takes at most 64ms to execute.
+The program interfaces 3 SHARP sensors, 5 Ultrasonic(HC-SR04) Sensors with optional 
+1 SHARP and 1 Ultrasonic sensor. If optional sensors are not interfaced, the pins 
+might be used as for extension. It also interfaces 4 forward-facing TCRT5000 via
+Analog Multiplexer.
+
+[Refer documentation for details on extensions.]
 
 
-This file is part of ProjectCurio.
+Author: Abhishek N. Kulkarni, Shruti Phadke
+Date Created: 06 April 2015
+Acknowledgements: Prof. Milind Patwardhan, Prof. Milind Kamble,
+  Prof. Mrunal Shidore, Monica Patel, Aditya Joshi.
+  
+  
 
-ProjectCurio is free software: you can redistribute it and/or modify
+This file is part of BCUDProject.
+
+BCUDProject is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-ProjectCurio is distributed in the hope that it will be useful,
+BCUDProject is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
+along with BCUDProject.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
 
+//---------------------------------------------------------------------------------------------
+//Shruti's earlier code
+
+//#include <SharpIR.h>
+//#include <avr/wdt.h>
+
+//#define ir A0                //Assign pin for Sharp input
+//#define model 20150          //Specify the model of sensor used
 
 
+//#define MINREAD 10          //Minimum distance read by Sharp
+//#define CLOSEOBSTACLE    0
+//boolean sharp_engage;       //Engages Sharp Protection
 
-/* ARDUINO2
-
-Description: Interfaces 2 Sharp's proximity sensors and ultrasonic obstacle detectors.
-             This program takes care of overcurrent protection and also calculates the distance 
-             by averaging number of consecutive readings
-
-*/
-
-#include <SharpIR.h>
-#include <avr/wdt.h>
-#define ir A0                //Assign pin for Sharp input
-#define model 20150          //Specify the model of sensor used
-
-
-#define MINREAD 10          //Minimum distance read by Sharp
-#define CLOSEOBSTACLE    0
-boolean sharp_engage;       //Engages Sharp Protection
-
-boolean closeobstable=false; //Gets true if obstacle is closer than MINREAD
+//boolean closeobstable=false; //Gets true if obstacle is closer than MINREAD
 
 
 
 
-SharpIR sharp(ir, 25, 93, model);
+//SharpIR sharp(ir, 25, 93, model);
 
 // ir: the pin where your sensor is attached
 // 25: the number of readings the library will make before calculating a mean distance
@@ -61,7 +64,7 @@ SharpIR sharp(ir, 25, 93, model);
 //                                            (working distance range according to the datasheets)
 
 /*Program variables*/
-float dis;
+//float dis;
 
 /*User functions
 
@@ -71,10 +74,10 @@ Parameters: None
   
 */
 
-float sharp_update(){
-   dis=sharp.distance();  // this returns the distance to the obstacle
-   return dis;
-}
+//float sharp_update(){
+//   dis=sharp.distance();  // this returns the distance to the obstacle
+//   return dis;
+//}
 
 /* Implements an algorithm which decides if system should be put in PROTECTION MODE based on
    Sharp's-Proximity sensor readings.
@@ -83,35 +86,107 @@ float sharp_update(){
   Parameters: None
   Returns: "true" if PROTECTION MODE is to be activated, "false" otherwise. (data type: boolean)
 */
+//boolean sharp_protect(){
+//  if(dis<MINREAD)
+//  {
+//    return true;
+//  }
+//}
 
-boolean sharp_protect(){
-  if(dis<MINREAD)
-  {
-    return true;
-  }
-}
+//void system_protect(uint8_t label){
+//  
+//}
+//---------------------------------------------------------------
 
-void system_protect(uint8_t label){
-  
-}
+// Modified by Abhishek on 07 April 2015; 22:20 hours
+
+#include "Global.h"
+#include "Proximity.h"
+
+byte ultra_enable = 0x00;        // Bits 5-0 represent 6 ultrasonic sensors. If bit is set --> ultrasonic is enabled.
+byte sharp_enable = 0x00;        // Bits 3-0 represent 4 SHARP sensors. If bit is set --> SHARP is enabled.
+boolean ir_compensate = false;   // Takes 2 values of TCRT with and without LED turned on.
+
+uint16_t IRValues[4];            // Readings of TCRT5000 sensors as 10-bit ADC value
+float SharpValues[4];            // Readings of SHARP sensors (in ?? <units>)
+float UltraValues[6];            // Readings of Ultrasonics sensors (in cm)
+
 void setup() {
-  
   Serial.begin(9600);
-  pinMode (ir, INPUT);
-  wdt_enable(WDTO_60MS);
+  
+//  pinMode (ir, INPUT);
+//  wdt_enable(WDTO_60MS);
 
+  
 }
 
+uint32_t time = 0;
 void loop() {
-wdt_reset();
+  
+  
+  //***********************************************************************************************
+  // TCRT5000 Proximity Sensing, Protection: 
+  // Observed Run Time: ?? 
+  // MAX TIME ALLOCATION: ??
+  time = micros();
+  
+  /* Update the values of 4 IR Proximity sensors */
+  ir_update(ir_compensate);
+  
+  /* Raise alarm to master if object is too close */
+  ir_protect();
+  
+  
+  time = micros() - time;
+  Serial.print("IR Updated in (us):: ");
+  Serial.println(time);
+  //***********************************************************************************************
+
+
+  
+  //***********************************************************************************************
+  // Sharp Proximity Sensing, Protection: 
+  // Observed Run Time: ?? 
+  // MAX TIME ALLOCATION: ??
+  time = micros();
+  
+  // Shruti: Your code goes here. 
+  
+  
+  time = micros() - time;
+  Serial.print("Sharp Updated in (us):: ");
+  Serial.println(time);
+  //***********************************************************************************************
+  
+  
+  
+  //***********************************************************************************************
+  // Ultrasonic Proximity Sensing, Protection: 
+  // Observed Run Time: ?? 
+  // MAX TIME ALLOCATION: ??
+  time = micros();
+  
+  ultrasonic_update(ultra_enable);
+  
+  time = micros() - time;
+
+  Serial.print("Ultra Updated in (us):: ");
+  Serial.println(time);
+  //***********************************************************************************************
+  
+  
+  
+  
+  
+//  wdt_reset();
 
   // IR Proximity Sensing, Protection
-  sharp_update();
-  if (sharp_engage){
-    if (sharp_protect()){
-      system_protect(CLOSEOBSTACLE);
-    }
-  }
+//  sharp_update();
+//  if (sharp_engage){
+//    if (sharp_protect()){
+//      system_protect(CLOSEOBSTACLE);
+//    }
+//  }
 }
 
 
