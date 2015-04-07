@@ -181,6 +181,19 @@ void loop() {
 //  wdt_reset();
 
   // IR Proximity Sensing, Protection
+//  if(sharp_enable.0=1)
+//  { SharpValues[0]=sharp_update();}
+//  
+//  if(sharp_enable.1=1)
+//   { SharpValues[1]=sharp_update();}
+//   
+//  if(sharp_enable.2=1)
+//     {SharpValues[2]=sharp_update();}
+//     
+//  if(sharp_enable.3=1)
+//     {SharpValues[3]=sharp_update():}
+   }
+  }
 //  sharp_update();
 //  if (sharp_engage){
 //    if (sharp_protect()){
