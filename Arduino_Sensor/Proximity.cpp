@@ -5,6 +5,10 @@ extern uint16_t IRValues[4];            // Readings of TCRT5000 sensors as 10-bi
 extern float SharpValues[4];            // Readings of SHARP sensors (in ?? <units>)
 extern float UltraValues[6];            // Readings of Ultrasonics sensors (in cm)
 
+SharpIR sharp1(PIN_SHARP_1, 25, 93, SHARP_MODEL);
+SharpIR sharp2(PIN_SHARP_2, 25, 93, SHARP_MODEL);
+SharpIR sharp3(PIN_SHARP_3, 25, 93, SHARP_MODEL);
+SharpIR sharp4(PIN_SHARP_4, 25, 93, SHARP_MODEL);
 
 
 void readIR(){
@@ -155,4 +159,27 @@ void ultrasonic_update(byte ultra_enable){
   if (ultra_enable && (1<<4)){ UltraValues[4] = readUltrasonic(5); }
   if (ultra_enable && (1<<5)){ UltraValues[5] = readUltrasonic(6); }
   
+}
+
+
+void sharp_update(byte sharp_enable){
+  if(sharp_enable && (1<<0) == 1)
+  {
+    SharpValues[0] = sharp1.distance();
+  }
+  
+  if(sharp_enable && (1<<1) == 1)
+  {
+    SharpValues[1] = sharp2.distance();
+  }
+  
+  if(sharp_enable && (1<<2) == 1)
+  {
+    SharpValues[2] = sharp3.distance();
+  }
+  
+  if(sharp_enable && (1<<3) == 1)
+  {
+    SharpValues[3] = sharp4.distance();
+  }
 }

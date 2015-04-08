@@ -1,6 +1,8 @@
 #ifndef GLOBAL_H_
 #define GLOBAL_H_
 
+#define SHARP_MODEL      20150
+
 #define PIN_SHARP_1      A0
 #define PIN_SHARP_2      A1
 #define PIN_SHARP_3      A2
