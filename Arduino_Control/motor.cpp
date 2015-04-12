@@ -127,6 +127,23 @@ void m_updateSpeed(PololuWheelEncoders enc, uint16_t* m1_speed, uint16_t* m2_spe
   
 }
 
+/* Update the code to infer the direction of rotation also */
+void m_updateSpeed(uint16_t* m1_speed, uint16_t* m2_speed){
+  float pTime;
+  
+  // Motor 1: Speed
+  pTime = pulseIn(PIN_M1_ENCA, LOW, 2000);
+  pTime += pulseIn(PIN_M1_ENCA, HIGH, 2000);
+  *(m1_speed) = 2.0 * CONST_TIME2SPEED / pTime;
+  
+  // Motor 2: Speed
+  pTime = pulseIn(PIN_M2_ENCA, LOW, 2000);
+  pTime += pulseIn(PIN_M2_ENCA, HIGH, 2000);
+  *(m2_speed) = 2.0 * CONST_TIME2SPEED / pTime;
+}
+
+
+
 void m1_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd){
   
   static uint16_t err_integral = 0;

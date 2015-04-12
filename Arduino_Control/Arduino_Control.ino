@@ -66,10 +66,6 @@ uint16_t m1_refSpeed = 0, m2_refSpeed = 0;    //speed = 0 ==> brakes applied; sp
 boolean pid_engage = false;
 
 
-uint32_t counter = 0;
-void T2_OVF(void){
-  counter++;
-}
 
 
 void setup(){
@@ -147,7 +143,8 @@ void loop(){
   m_updateCurrent(&m1_current, &m2_current);
   
   /* SENSE: SPEED OF MOTORS 1, 2 */
-  m_updateSpeed(encoders, &m1_speed, &m2_speed);  
+  //m_updateSpeed(encoders, &m1_speed, &m2_speed);  
+  m_updateSpeed(&m1_speed, &m2_speed);  
   
   /* PROTECTIONS HERE */
   //  m_current_protect(m1_current, m2_current);

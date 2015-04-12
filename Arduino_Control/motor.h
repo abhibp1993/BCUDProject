@@ -25,6 +25,17 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+
+/*
+FORMULA:
+
+1. Speed vs timeOfPulseOnEncoderChannelA
+    speed = (60/(24 * 34.1)) / time
+          = 0.07331378299120234 / time
+          = 73313.783 / time_in_us
+*/
+
+
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
@@ -34,12 +45,13 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_SPEED           330
 #define MAX_WAIT_TIME       2000
 #define SPEED_CONSTANT      366656.8915
-
+#define CONST_TIME2SPEED    73313.783
 
 void setMaxAcceleration(float val);
 
 void m_updateCurrent(float* m1_curr, float* m2_curr);
 void m_updateSpeed(PololuWheelEncoders enc, uint16_t* m1_speed, uint16_t* m2_speed);
+void m_updateSpeed(uint16_t* m1_speed, uint16_t* m2_speed);
 
 void m1_setSpeed(uint16_t refSpeed);
 void m1_setSpeed(uint16_t refSpeed, uint16_t currSpeed, float kp, float ki, float kd);
