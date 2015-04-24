@@ -24,12 +24,12 @@ You should have received a copy of the GNU General Public License
 along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
-#ifndef PROXIMITY_H_
-#define PROXIMITY_H_
-
-#include "Arduino.h"
-
-void ir_update(byte enable, uint16_t* arrVal);
-
-#endif /* PROXIMITY_H_ */
+//
+//#ifndef PROXIMITY_H_
+//#define PROXIMITY_H_
+//
+//#include "Arduino.h"
+//
+//void ir_update(byte enable, uint16_t* arrVal);
+//
+//#endif /* PROXIMITY_H_ */

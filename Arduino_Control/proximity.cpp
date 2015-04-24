@@ -24,86 +24,86 @@ You should have received a copy of the GNU General Public License
 along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
-#include "Arduino.h"
-#include "global.h"
-#include "proximity.h"
-
-
-void ir_update(byte enable, uint16_t* arrVal){
-
-  uint16_t val = 0;
-  
-  if (enable & (1<<0)){
-    digitalWrite(PIN_AM_S2, LOW);
-    digitalWrite(PIN_AM_S1, LOW);
-    digitalWrite(PIN_AM_S0, LOW);
-    
-    delayMicroseconds(5);
-    arrVal[0] = analogRead(PIN_AM_Y);
-  }  
-  
-  if (enable & (1<<1)){
-    digitalWrite(PIN_AM_S2, LOW);
-    digitalWrite(PIN_AM_S1, LOW);
-    digitalWrite(PIN_AM_S0, HIGH);
-    
-    delayMicroseconds(5);
-    arrVal[1] = analogRead(PIN_AM_Y);
-  }  
-
-  if (enable & (1<<2)){
-    digitalWrite(PIN_AM_S2, LOW);
-    digitalWrite(PIN_AM_S1, HIGH);
-    digitalWrite(PIN_AM_S0, LOW);
-    
-    delayMicroseconds(5);
-    arrVal[2] = analogRead(PIN_AM_Y);
-  }  
-
-  if (enable & (1<<3)){
-    digitalWrite(PIN_AM_S2, LOW);
-    digitalWrite(PIN_AM_S1, HIGH);
-    digitalWrite(PIN_AM_S0, HIGH);
-    
-    delayMicroseconds(5);
-    arrVal[3] = analogRead(PIN_AM_Y);
-  }  
-
-  if (enable & (1<<4)){
-    digitalWrite(PIN_AM_S2, HIGH);
-    digitalWrite(PIN_AM_S1, LOW);
-    digitalWrite(PIN_AM_S0, LOW);
-    
-    delayMicroseconds(5);
-    arrVal[4] = analogRead(PIN_AM_Y);
-  }  
-
-  if (enable & (1<<5)){
-    digitalWrite(PIN_AM_S2, HIGH);
-    digitalWrite(PIN_AM_S1, LOW);
-    digitalWrite(PIN_AM_S0, HIGH);
-    
-    delayMicroseconds(5);
-    arrVal[5] = analogRead(PIN_AM_Y);
-  }  
-
-  if (enable & (1<<6)){
-    digitalWrite(PIN_AM_S2, HIGH);
-    digitalWrite(PIN_AM_S1, HIGH);
-    digitalWrite(PIN_AM_S0, LOW);
-    
-    delayMicroseconds(5);
-    arrVal[6] = analogRead(PIN_AM_Y);
-  }  
-
-  if (enable & (1<<7)){
-    digitalWrite(PIN_AM_S2, HIGH);
-    digitalWrite(PIN_AM_S1, HIGH);
-    digitalWrite(PIN_AM_S0, HIGH);
-    
-    delayMicroseconds(5);
-    arrVal[7] = analogRead(PIN_AM_Y);
-  }  
-  
-}
+//
+//#include "Arduino.h"
+//#include "global.h"
+//#include "proximity.h"
+//
+//
+//void ir_update(byte enable, uint16_t* arrVal){
+//
+//  uint16_t val = 0;
+//  
+//  if (enable & (1<<0)){
+//    digitalWrite(PIN_AM_S2, LOW);
+//    digitalWrite(PIN_AM_S1, LOW);
+//    digitalWrite(PIN_AM_S0, LOW);
+//    
+//    delayMicroseconds(5);
+//    arrVal[0] = analogRead(PIN_AM_Y);
+//  }  
+//  
+//  if (enable & (1<<1)){
+//    digitalWrite(PIN_AM_S2, LOW);
+//    digitalWrite(PIN_AM_S1, LOW);
+//    digitalWrite(PIN_AM_S0, HIGH);
+//    
+//    delayMicroseconds(5);
+//    arrVal[1] = analogRead(PIN_AM_Y);
+//  }  
+//
+//  if (enable & (1<<2)){
+//    digitalWrite(PIN_AM_S2, LOW);
+//    digitalWrite(PIN_AM_S1, HIGH);
+//    digitalWrite(PIN_AM_S0, LOW);
+//    
+//    delayMicroseconds(5);
+//    arrVal[2] = analogRead(PIN_AM_Y);
+//  }  
+//
+//  if (enable & (1<<3)){
+//    digitalWrite(PIN_AM_S2, LOW);
+//    digitalWrite(PIN_AM_S1, HIGH);
+//    digitalWrite(PIN_AM_S0, HIGH);
+//    
+//    delayMicroseconds(5);
+//    arrVal[3] = analogRead(PIN_AM_Y);
+//  }  
+//
+//  if (enable & (1<<4)){
+//    digitalWrite(PIN_AM_S2, HIGH);
+//    digitalWrite(PIN_AM_S1, LOW);
+//    digitalWrite(PIN_AM_S0, LOW);
+//    
+//    delayMicroseconds(5);
+//    arrVal[4] = analogRead(PIN_AM_Y);
+//  }  
+//
+//  if (enable & (1<<5)){
+//    digitalWrite(PIN_AM_S2, HIGH);
+//    digitalWrite(PIN_AM_S1, LOW);
+//    digitalWrite(PIN_AM_S0, HIGH);
+//    
+//    delayMicroseconds(5);
+//    arrVal[5] = analogRead(PIN_AM_Y);
+//  }  
+//
+//  if (enable & (1<<6)){
+//    digitalWrite(PIN_AM_S2, HIGH);
+//    digitalWrite(PIN_AM_S1, HIGH);
+//    digitalWrite(PIN_AM_S0, LOW);
+//    
+//    delayMicroseconds(5);
+//    arrVal[6] = analogRead(PIN_AM_Y);
+//  }  
+//
+//  if (enable & (1<<7)){
+//    digitalWrite(PIN_AM_S2, HIGH);
+//    digitalWrite(PIN_AM_S1, HIGH);
+//    digitalWrite(PIN_AM_S0, HIGH);
+//    
+//    delayMicroseconds(5);
+//    arrVal[7] = analogRead(PIN_AM_Y);
+//  }  
+//  
+//}

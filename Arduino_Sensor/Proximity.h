@@ -5,7 +5,8 @@
 #include "Arduino.h"
 
 // TCRT5000 Related Functions
-void ir_update(boolean compensate);
+//void ir_update(boolean compensate);
+void ir_update(byte enable, uint16_t* arrVal);
 void ir_protect();
 
 // Ultrasonic Related Functions

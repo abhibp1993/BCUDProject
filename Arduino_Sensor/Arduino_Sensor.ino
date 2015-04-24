@@ -108,40 +108,40 @@ Parameters: None
 #include "Proximity.h"
 
 byte ultra_enable = 0x00;        // Bits 5-0 represent 6 ultrasonic sensors. If bit is set --> ultrasonic is enabled.
-byte sharp_enable = 0x00;        // Bits 3-0 represent 4 SHARP sensors. If bit is set --> SHARP is enabled.
+//byte sharp_enable = 0x00;        // Bits 3-0 represent 4 SHARP sensors. If bit is set --> SHARP is enabled.
 boolean ir_compensate = false;   // Takes 2 values of TCRT with and without LED turned on.
 
 uint16_t IRValues[4];            // Readings of TCRT5000 sensors as 10-bit ADC value
-float SharpValues[4];            // Readings of SHARP sensors (in ?? <units>)
-float UltraValues[6];            // Readings of Ultrasonics sensors (in cm)
-
-void sharp_call()
-{
-  if(sharp_enable.0=1)
-  {
-SharpIR sharp(ir0, 25, 93, model);
-  sharp_update();
-  }
-  
-  if(sharp_enable.1=1)
-  {
-SharpIR sharp(ir1, 25, 93, model);
-  sharp_update();
-  }
-  
-  if(sharp_enable.2=1)
-  {
-SharpIR sharp(ir2, 25, 93, model);
-  sharp_update();
-  }
-  
-  if(sharp_enable.3=1)
-  {
-SharpIR sharp(ir3, 25, 93, model);
-  sharp_update();
-  }
-}
-  
+//float SharpValues[4];            // Readings of SHARP sensors (in ?? <units>)
+//float UltraValues[6];            // Readings of Ultrasonics sensors (in cm)
+float Ultravalue;
+//void sharp_call()
+//{
+//  if(sharp_enable.0=1)
+//  {
+//SharpIR sharp(ir0, 25, 93, model);
+//  sharp_update();
+//  }
+//  
+//  if(sharp_enable.1=1)
+//  {
+//SharpIR sharp(ir1, 25, 93, model);
+//  sharp_update();
+//  }
+//  
+//  if(sharp_enable.2=1)
+//  {
+//SharpIR sharp(ir2, 25, 93, model);
+//  sharp_update();
+//  }
+//  
+//  if(sharp_enable.3=1)
+//  {
+//SharpIR sharp(ir3, 25, 93, model);
+//  sharp_update();
+//  }
+//}
+//  
 
 void setup() {
   Serial.begin(9600);
@@ -157,37 +157,37 @@ void loop() {
   
   
   //***********************************************************************************************
-  // TCRT5000 Proximity Sensing, Protection: 
-  // Observed Run Time: ?? 
-  // MAX TIME ALLOCATION: ??
-  time = micros();
-  
-  /* Update the values of 4 IR Proximity sensors */
-  ir_update(ir_compensate);
-  
-  /* Raise alarm to master if object is too close */
-  ir_protect();
-  
-  
-  time = micros() - time;
-  Serial.print("IR Updated in (us):: ");
-  Serial.println(time);
+//  // TCRT5000 Proximity Sensing, Protection: 
+//  // Observed Run Time: ?? 
+//  // MAX TIME ALLOCATION: ??
+//  time = micros();
+//  
+//  /* Update the values of 4 IR Proximity sensors */
+//  ir_update(ir_compensate);
+//  
+//  /* Raise alarm to master if object is too close */
+//  ir_protect();
+//  
+//  
+//  time = micros() - time;
+//  Serial.print("IR Updated in (us):: ");
+//  Serial.println(time);
   //***********************************************************************************************
 
 
   
-  //***********************************************************************************************
-  // Sharp Proximity Sensing, Protection: 
-  // Observed Run Time: ?? 
-  // MAX TIME ALLOCATION: ??
-  time = micros();
-  
-  // Shruti: Your code goes here. 
-  
-  
-  time = micros() - time;
-  Serial.print("Sharp Updated in (us):: ");
-  Serial.println(time);
+//  //***********************************************************************************************
+//  // Sharp Proximity Sensing, Protection: 
+//  // Observed Run Time: ?? 
+//  // MAX TIME ALLOCATION: ??
+//  time = micros();
+//  
+//  // Shruti: Your code goes here. 
+//  
+//  
+//  time = micros() - time;
+////  Serial.print("Sharp Updated in (us):: ");
+//  Serial.println(time);
   //***********************************************************************************************
   
   
@@ -205,10 +205,21 @@ void loop() {
   Serial.print("Ultra Updated in (us):: ");
   Serial.println(time);
   //***********************************************************************************************
-  
-  
-  
-  
+    
+    //TCRT SENSORE UPDATING AND PROTECTION
+  time = micros();
+   /*SENSE: IR-PROXIMITY RANGE READINGS */
+  ir_update(ir_enable, ir_value);  
+    
+    
+    //PROTECT
+  ir_protect();
+    
+  time = micros() - time;
+  Serial.print("IR Updated in (us):: ");
+  Serial.println(time);
+
+//**************************************************************************************************
   
 //  wdt_reset();
 

@@ -55,9 +55,9 @@ void system_protect(uint8_t state){
 
 
 
-void ir_protect(){
-  // pass. Currently we shall employ  no particular protection for IR values.
-}
+//void ir_protect(){
+//  // pass. Currently we shall employ  no particular protection for IR values.
+//}
 
 
 void m_current_protect(float m1_curr, float m2_curr){
@@ -68,26 +68,26 @@ void m_current_protect(float m1_curr, float m2_curr){
 }
 
 
-void m_diagnostics_protect(){
-
-  // Check Status on M1_DIAG1
-  digitalWrite(PIN_DM_S0, LOW);
-  digitalWrite(PIN_DM_S0, LOW);
-  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
-  
-    // Check Status on M1_DIAG2
-  digitalWrite(PIN_DM_S0, LOW);
-  digitalWrite(PIN_DM_S0, HIGH);
-  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
-  
-    // Check Status on M2_DIAG1
-  digitalWrite(PIN_DM_S0, HIGH);
-  digitalWrite(PIN_DM_S0, LOW);
-  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
-  
-    // Check Status on M2_DIAG2
-  digitalWrite(PIN_DM_S0, HIGH);
-  digitalWrite(PIN_DM_S0, HIGH);
-  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
-  
-}
+//void m_diagnostics_protect(){
+//
+//  // Check Status on M1_DIAG1
+//  digitalWrite(PIN_DM_S0, LOW);
+//  digitalWrite(PIN_DM_S0, LOW);
+//  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
+//  
+//    // Check Status on M1_DIAG2
+//  digitalWrite(PIN_DM_S0, LOW);
+//  digitalWrite(PIN_DM_S0, HIGH);
+//  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
+//  
+//    // Check Status on M2_DIAG1
+//  digitalWrite(PIN_DM_S0, HIGH);
+//  digitalWrite(PIN_DM_S0, LOW);
+//  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
+//  
+//    // Check Status on M2_DIAG2
+//  digitalWrite(PIN_DM_S0, HIGH);
+//  digitalWrite(PIN_DM_S0, HIGH);
+//  if (digitalRead(PIN_DM_Y) == LOW){ system_protect(SHORTCIRCUIT); }
+//  
+//}

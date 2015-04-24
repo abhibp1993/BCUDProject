@@ -37,7 +37,7 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 #define SHORTCIRCUIT       2
 
 
-void ir_protect();
+//void ir_protect();
 void m_current_protect(float m1_curr, float m2_curr);
 void m_diagnostics_protect();
 

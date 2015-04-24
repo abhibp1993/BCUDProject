@@ -34,7 +34,7 @@ along with BCUDProject.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include "global.h"
-#include "proximity.h"
+//#include "proximity.h"
 #include "motor.h"
 #include "protect.h"
 
@@ -44,8 +44,8 @@ along with BCUDProject.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // IR-Proximity: TCRT5000 via Analog Mux
-byte ir_enable = 0xFF;
-uint16_t ir_value[8];        // check assignment of TCRT <-> index
+//byte ir_enable = 0xFF;
+//uint16_t ir_value[8];        // check assignment of TCRT <-> index
 
 // Motors: Speed and Current
 PololuWheelEncoders encoders;
@@ -75,9 +75,9 @@ void T2_OVF(void){
 void setup(){
   Serial.begin(9600);
   
-  pinMode(PIN_AM_S0, OUTPUT);
-  pinMode(PIN_AM_S1, OUTPUT);
-  pinMode(PIN_AM_S2, OUTPUT);
+// pinMode(PIN_AM_S0, OUTPUT);
+// pinMode(PIN_AM_S1, OUTPUT);
+// pinMode(PIN_AM_S2, OUTPUT);
   
   pinMode(PIN_M1_PWM, OUTPUT);
   pinMode(PIN_M1_IN1, OUTPUT);
@@ -91,9 +91,9 @@ void setup(){
   pinMode(PIN_M2_ENCA, INPUT);
   pinMode(PIN_M2_ENCB, INPUT);  
    
-  pinMode(PIN_DM_S0, OUTPUT);
-  pinMode(PIN_DM_S1, OUTPUT);
-  pinMode(PIN_DM_Y, INPUT);  
+//  pinMode(PIN_DM_S0, OUTPUT);
+//  pinMode(PIN_DM_S1, OUTPUT);
+//  pinMode(PIN_DM_Y, INPUT);  
   
   
   encoders.init(2,4,8,7);
@@ -124,15 +124,15 @@ void loop(){
   
   
   /* SENSE: IR-PROXIMITY RANGE READINGS */
-  ir_update(ir_enable, ir_value);  
+//  ir_update(ir_enable, ir_value);  
   
-  /* PROTECTIONS */
-  //ir_protect();
+//  /* PROTECTIONS */
+//  //ir_protect();
   
   time = micros() - time;
 
-  Serial.print("IR Updated in (us):: ");
-  Serial.println(time);
+//  Serial.print("IR Updated in (us):: ");
+//  Serial.println(time);
   //***********************************************************************************************
   
   
