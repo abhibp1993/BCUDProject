@@ -42,11 +42,6 @@ along with BCUDProject.  If not, see <http://www.gnu.org/licenses/>.
 #include <PololuWheelEncoders.h>
 
 
-
-// IR-Proximity: TCRT5000 via Analog Mux
-//byte ir_enable = 0xFF;
-//uint16_t ir_value[8];        // check assignment of TCRT <-> index
-
 // Motors: Speed and Current
 PololuWheelEncoders encoders;
 
@@ -75,10 +70,6 @@ void T2_OVF(void){
 void setup(){
   Serial.begin(9600);
   
-// pinMode(PIN_AM_S0, OUTPUT);
-// pinMode(PIN_AM_S1, OUTPUT);
-// pinMode(PIN_AM_S2, OUTPUT);
-  
   pinMode(PIN_M1_PWM, OUTPUT);
   pinMode(PIN_M1_IN1, OUTPUT);
   pinMode(PIN_M1_IN2, OUTPUT);
@@ -90,72 +81,27 @@ void setup(){
   pinMode(PIN_M2_IN2, OUTPUT);
   pinMode(PIN_M2_ENCA, INPUT);
   pinMode(PIN_M2_ENCB, INPUT);  
-   
-//  pinMode(PIN_DM_S0, OUTPUT);
-//  pinMode(PIN_DM_S1, OUTPUT);
-//  pinMode(PIN_DM_Y, INPUT);  
+
   
-  
-  encoders.init(2,4,8,7);
-  
-  // Testing configurations
-  pid_engage = false;
-  m1_kp = 0.5;
-  m1_ki = 0.1;
-  
-  m1_refSpeed = 100;
-  m2_refSpeed = 100;
-  
-  digitalWrite(PIN_M1_IN1, LOW);
-  digitalWrite(PIN_M1_IN2, HIGH);
-  analogWrite(9, 100);
+  encoders.init(PIN_M1_ENCA, PIN_M1_ENCB, PIN_M2_ENCA, PIN_M2_ENCB);
 }
 
 
 uint32_t time =0; 
 void loop(){  
   
-  
-  //***********************************************************************************************
-  // IR Proximity Sensing, Protection: 
-  // Observed Run Time: 1028 micros; 
-  // MAX TIME ALLOCATION: 2ms
-  time = micros();
-  
-  
-  /* SENSE: IR-PROXIMITY RANGE READINGS */
-//  ir_update(ir_enable, ir_value);  
-  
-//  /* PROTECTIONS */
-//  //ir_protect();
-  
-  time = micros() - time;
-
-//  Serial.print("IR Updated in (us):: ");
-//  Serial.println(time);
-  //***********************************************************************************************
-  
-  
-  
   //***********************************************************************************************
   // Motor Current, Speed Sensing - Intialize, Protection
   // Observed Run Time:  764 us + [20.35ms]
   // MAX TIME ALLOCATION: 25ms
-  time = micros();
+  //time = micros();
   
   /* SENSE: CURRENT FLOWING THROUGH MOTORS 1, 2 */
   m_updateCurrent(&m1_current, &m2_current);
   
   /* SENSE: SPEED OF MOTORS 1, 2 */
   m_updateSpeed(encoders, &m1_speed, &m2_speed);  
-  
-  /* PROTECTIONS HERE */
-  //  m_current_protect(m1_current, m2_current);
-  //  m_diagnostics_protect();
-  
-  time = micros() - time;  
-  Serial.print("Motor Current Updated in (us):: ");
-  Serial.println(time);
+   
   
   //***********************************************************************************************
   
@@ -166,26 +112,19 @@ void loop(){
   // Observed Run Time: [without PID: 92us], [with PID: 332us]
   // MAX TIME ALLOCATION: 500us
   
-  time = micros();
+  //time = micros();
   
   /* ACTION: SET THE SPEED OF MOTORS 1, 2. PID OR DIRECT METHODS */
   if (pid_engage == true){ 
-    Serial.println("PID"); 
     m1_setSpeed(m1_refSpeed, m1_speed, m1_kp, m1_ki, m1_kd); 
     m2_setSpeed(m2_refSpeed, m2_speed, m2_kp, m2_ki, m2_kd); 
   }
-  else{ 
-    Serial.println("PWM"); 
+  else{
     m1_setSpeed(m1_refSpeed); 
     m2_setSpeed(m2_refSpeed);
   }
   
-  time = micros() - time;  
-  Serial.print("Motor Speed Set in (us):: ");
-  Serial.println(time);
-  
   
   //***********************************************************************************************
-  Serial.println("--------------------------");
-  delay(1000);
+  // ROS Communication
 }

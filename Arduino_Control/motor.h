@@ -28,6 +28,7 @@ along with ProjectCurio.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
+#include <Arduino.h>
 #include <PololuWheelEncoders.h>
 
 #define M_CURR_SCALE        (0.13) * 1024 / 5.0      // scaling factor = V_perAmp / 5 * 1024
