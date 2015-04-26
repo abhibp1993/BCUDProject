@@ -31,7 +31,8 @@ along with BCUDProject.  If not, see <http://www.gnu.org/licenses/>.
 
 
 /* Implementing Configuratin 2: Rx-Tx communication */
-
+#include <ros.h>
+#include <curio_pkg/ard1_sensor_input.h>
 
 #include "global.h"
 //#include "proximity.h"
@@ -61,6 +62,13 @@ uint16_t m1_refSpeed = 0, m2_refSpeed = 0;    //speed = 0 ==> brakes applied; sp
 boolean pid_engage = false;
 
 
+//ROS Messages
+ros::NodeHandle  nh;
+curio_pkg::ard1_sensor_input sensorInput;
+ros::Publisher chatter("Arduino1_input", &sensorInput);
+
+
+
 uint32_t counter = 0;
 void T2_OVF(void){
   counter++;
@@ -84,6 +92,10 @@ void setup(){
 
   
   encoders.init(PIN_M1_ENCA, PIN_M1_ENCB, PIN_M2_ENCA, PIN_M2_ENCB);
+  
+  //ROS node setup
+  nh.initNode();
+  nh.advertise(chatter);
 }
 
 
@@ -127,4 +139,12 @@ void loop(){
   
   //***********************************************************************************************
   // ROS Communication
+  sensorInput.m1.m_speed = m1_speed;
+  sensorInput.m1.m_current = m1_current;
+  sensorInput.m2.m_speed = m2_speed;
+  sensorInput.m2.m_current =  m2_current;
+  
+  chatter.publish(&sensorInput);
+  nh.spinOnce();
+  delay(70);
 }
